@@ -6,6 +6,7 @@ from alembic import context
 from core.db import Base
 from item.models import Base as ItemModelsBase  # noqa
 from user.models import Base as UserModelsBase  # noqa
+from blog.models import Base as EntryModelsBase  # noqa
 
 
 config = context.config
