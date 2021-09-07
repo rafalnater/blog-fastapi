@@ -1,0 +1,12 @@
+app:
+  port: 8000
+  media:
+    storage: 100Mi
+
+postgres:
+  image: postgres:13.3-alpine
+  storage: 1Gi
+
+rabbitmq:
+  image: rabbitmq:3-alpine
+  storage: 100Mi

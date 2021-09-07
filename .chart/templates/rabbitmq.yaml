@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  namespace: {{ .Release.Namespace }}
+  labels:
+    service: rabbitmq
+spec:
+  type: ClusterIP
+  ports:
+    - name: "5672"
+      port: 5672
+      targetPort: 5672
+  selector:
+    service: rabbitmq
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: {{ .Release.Namespace }}
+  labels:
+    service: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      service: rabbitmq
+  serviceName: rabbitmq
+  replicas: 1
+  template:
+    metadata:
+      namespace: {{ .Release.Namespace }}
+      labels:
+        service: rabbitmq
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: rabbitmq
+          image: {{ .Values.rabbitmq.image }}
+          resources:
+            requests:
+              memory: "100Mi"
+          ports:
+            - containerPort: 5672
+              name: rabbitmq
+          volumeMounts:
+            - name: rabbitmq
+              mountPath: /var/lib/rabbitmq
+              subPath: rabbitmq
+      restartPolicy: Always
+  volumeClaimTemplates:
+    - metadata:
+        namespace: {{ .Release.Namespace }}
+        name: rabbitmq
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "standard-retain"
+        resources:
+          requests:
+            storage: {{ .Values.rabbitmq.storage }}

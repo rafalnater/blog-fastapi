@@ -1,0 +1,14 @@
+include:
+  - project: 'merixstudio/pts/pipelines'
+    ref: 'master'
+    file: '/Pipeline.gitlab-ci.yml'
+
+variables:
+  DOCKERFILE: docker/Dockerfile
+
+  LINT_ENABLED: 1
+  LINT_COMMAND: ./docker/entrypoint.sh lint
+
+  TEST_ENABLED: 1
+  TEST_COMMAND: ./docker/entrypoint.sh test
+  TEST_SERVICE_NAME: backend

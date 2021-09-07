@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: celerybeat
+  name: celerybeat
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      service: celerybeat
+  template:
+    metadata:
+      labels:
+        service: celerybeat
+    spec:
+      securityContext:
+        fsGroup: 101 # fastapi group
+      containers:
+        - args: ["beat"]
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: env
+          image: {{ .Values.app.image }}
+          name: celerybeat
+          resources:
+            requests:
+              memory: "100Mi"
+          volumeMounts:
+            - mountPath: /app/media
+              name: media
+      restartPolicy: Always
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+      nodeSelector:
+        node-type: stateless
+      tolerations:
+        - key: node-type
+          operator: Equal
+          value: stateless
+          effect: NoSchedule

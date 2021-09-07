@@ -1,0 +1,56 @@
+version: "3.8"
+
+x-base: &base
+  image: fastapi_project_template
+  depends_on:
+    - postgres
+    - rabbitmq
+  env_file: .env
+  volumes:
+    - .:/app
+    - media:/app/media
+
+services:
+  postgres:
+    image: postgres:13.3-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-alpine
+
+  backend:
+    <<: *base
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        DEBUG: "true"
+    command: runserver
+    ports:
+      - "8000:8000"
+
+  worker:
+    <<: *base
+    command: worker
+    depends_on:
+      - backend
+
+  beat:
+    <<: *base
+    command: beat
+    depends_on:
+      - backend
+
+  bootstrap:
+    <<: *base
+    command: bootstrap
+    depends_on:
+      - backend
+
+volumes:
+  pg-data:
+  media:

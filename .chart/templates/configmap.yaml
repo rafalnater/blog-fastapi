@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env
+  namespace: {{ .Release.Namespace }}
+data:
+{{ toYaml .Values.env | indent 2 }}

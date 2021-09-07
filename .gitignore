@@ -1,0 +1,13 @@
+.idea/
+__pycache__/
+.mypy_cache
+.pytest_cache
+.coverage
+htmlcov
+.env
+celerybeat-schedule
+celerybeat.pid
+*.pyc
+media/
+test.db
+docker-compose.override.yml

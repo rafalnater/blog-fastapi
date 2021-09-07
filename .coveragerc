@@ -1,0 +1,10 @@
+[run]
+source = src
+omit =
+    *main.py
+    *worker.py
+    *core/db.py
+    *core/celery.py
+
+[report]
+show_missing = true

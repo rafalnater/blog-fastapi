@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.domain }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: fastapi
+              servicePort: {{ .Values.app.port }}
