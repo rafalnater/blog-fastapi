@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from core.mapper import AbstractMapper
 from blog.models import Entry as EntryModel
 from blog.schemas import EntryCreate as EntryCreateSchema
+from core.mapper import AbstractMapper
 
 
 class EntryCreationMapper(AbstractMapper[EntryCreateSchema, EntryModel]):

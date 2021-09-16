@@ -1,14 +1,14 @@
-from pydantic import BaseModel
 from datetime import datetime
-
 from typing import Optional
+
+from pydantic import BaseModel
 
 
 class ArticleBase(BaseModel):
     title: Optional[str]
     body: str = ""
     comments_count: int = 0
-    pub_date: datetime = None
+    pub_date: Optional[datetime] = None
 
 
 class ArticleCreate(ArticleBase):

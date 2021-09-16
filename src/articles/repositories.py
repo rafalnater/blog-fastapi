@@ -1,13 +1,14 @@
 from datetime import datetime
 from typing import Type
 
-from core.db import Base
-from core.mapper import AbstractMapper
-from core.repository import AbstractRepository, ModelType
+from fastapi.encoders import jsonable_encoder
+
 from articles.mappers import ArticleCreationMapper
 from articles.models import Article as ArticleModel
 from articles.schemas import Article as ArticleSchema
-from fastapi.encoders import jsonable_encoder
+from core.db import Base
+from core.mapper import AbstractMapper
+from core.repository import AbstractRepository, ModelType
 
 
 class ArticleRepository(AbstractRepository[ArticleModel, int, ArticleSchema]):
@@ -17,16 +18,12 @@ class ArticleRepository(AbstractRepository[ArticleModel, int, ArticleSchema]):
     def _get_mapper(self) -> Type[AbstractMapper]:
         return ArticleCreationMapper
 
-    def remove(self, article: ArticleModel) -> ModelType:
+    def remove(self, article: ArticleModel) -> ArticleModel:
         self._db.delete(article)
         self._db.commit()
         return article
 
-    def update(
-        self,
-        article: ArticleModel,
-        update_data: ArticleSchema
-    ):
+    def update(self, article: ArticleModel, update_data: ArticleSchema) -> ArticleModel:
         article_data = jsonable_encoder(article)
         if not isinstance(update_data, dict):
             update_data = update_data.dict(exclude_unset=True)

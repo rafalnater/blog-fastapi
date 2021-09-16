@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from core.mapper import AbstractMapper
 from articles.models import Article as ArticleModel
 from articles.schemas import ArticleCreate as ArticleCreateSchema
+from core.mapper import AbstractMapper
 
 
 class ArticleCreationMapper(AbstractMapper[ArticleCreateSchema, ArticleModel]):

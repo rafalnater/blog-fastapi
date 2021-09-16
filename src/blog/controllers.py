@@ -15,7 +15,8 @@ router = APIRouter()
 
 @router.get("/", response_model=List[EntrySchema])
 async def get_entries(
-    offset: int = 0, entry_repository: EntryRepository = Depends(EntryRepository.instance)
+    offset: int = 0,
+    entry_repository: EntryRepository = Depends(EntryRepository.instance),
 ) -> List[EntryModel]:
     """
     Retrieve entries.

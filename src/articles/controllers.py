@@ -15,7 +15,8 @@ router = APIRouter()
 
 @router.get("/", response_model=List[ArticleSchema])
 async def get_articles(
-    offset: int = 0, article_repository: ArticleRepository = Depends(ArticleRepository.instance)
+    offset: int = 0,
+    article_repository: ArticleRepository = Depends(ArticleRepository.instance),
 ) -> List[ArticleModel]:
     """
     Retrieve articles.
@@ -51,7 +52,8 @@ async def update_article(
 
 @router.get("/{article_id}/", response_model=ArticleSchema)
 async def get_article(
-    article_id: int, article_repository: ArticleRepository = Depends(ArticleRepository.instance)
+    article_id: int,
+    article_repository: ArticleRepository = Depends(ArticleRepository.instance),
 ) -> ArticleModel:
     """
     Get article by ID.
@@ -61,7 +63,8 @@ async def get_article(
 
 @router.delete("/{article_id}", response_model=ArticleSchema)
 def delete_item(
-    article_id: int, article_repository: ArticleRepository = Depends(ArticleRepository.instance)
+    article_id: int,
+    article_repository: ArticleRepository = Depends(ArticleRepository.instance),
 ) -> ArticleModel:
     """
     Delete an article.
