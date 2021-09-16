@@ -1,15 +1,21 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+from typing import Optional
+
 
 class EntryBase(BaseModel):
-    title: str
+    title: Optional[str]
     body: str = ""
-    comments_count: int
+    comments_count: int = 0
     pub_date: datetime = None
 
 
 class EntryCreate(EntryBase):
+    title: str
+
+
+class EntryUpdate(EntryBase):
     pass
 
 
