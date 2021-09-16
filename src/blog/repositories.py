@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Type
 
 from core.db import Base
@@ -33,6 +34,7 @@ class EntryRepository(AbstractRepository[EntryModel, int, EntrySchema]):
         for field in entry_data:
             if field in update_data:
                 setattr(entry, field, update_data[field])
+        entry.modified = datetime.now()
         self._db.add(entry)
         self._db.commit()
         self._db.refresh(entry)
