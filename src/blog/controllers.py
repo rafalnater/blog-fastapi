@@ -16,6 +16,9 @@ router = APIRouter()
 async def get_entries(
     offset: int = 0, entry_repository: EntryRepository = Depends(EntryRepository.instance)
 ) -> List[EntryModel]:
+    """
+    Retrieve entries.
+    """
     return entry_repository.all(offset=offset)
 
 
@@ -24,6 +27,9 @@ async def create_entry(
     entry: EntryCreateSchema,
     entry_repository: EntryRepository = Depends(EntryRepository.instance),
 ) -> EntryModel:
+    """
+    Create new entry.
+    """
     try:
         return entry_repository.create(entry)
     except IntegrityError as cause:
@@ -34,4 +40,20 @@ async def create_entry(
 async def get_entry(
     entry_id: int, entry_repository: EntryRepository = Depends(EntryRepository.instance)
 ) -> EntryModel:
+    """
+    Get entry by ID.
+    """
     return entry_repository.find_by_id(identifier=entry_id)
+
+
+@router.delete("/{entry_id}", response_model=EntrySchema)
+def delete_item(
+    entry_id: int, entry_repository: EntryRepository = Depends(EntryRepository.instance)
+) -> EntryModel:
+    """
+    Delete an entry.
+    """
+    entry_object = entry_repository.find_by_id(identifier=entry_id)
+    if not entry_object:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    return entry_repository.remove(entry_object)
