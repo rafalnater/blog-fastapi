@@ -11,6 +11,9 @@ class Comment(Base):
     body = Column(Text)
     created = Column(DateTime)
 
-    object_type = Column(Unicode(255))
-    object_id = Column(Integer)
-    object = generic_relationship(object_type, object_id)
+    commentable_object_type = Column(Unicode(255))
+    commentable_object_id = Column(Integer)
+    commentable_object = generic_relationship(
+        commentable_object_type,
+        commentable_object_id,
+    )
