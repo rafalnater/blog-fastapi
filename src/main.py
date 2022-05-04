@@ -3,6 +3,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from core.settings import settings
 from blog.controllers import router as blog_router
+from articles.controllers import router as article_router
+from comments.controllers import router as comment_router
 from item.controllers import router as item_router
 from user.controllers import router as user_router
 
@@ -29,3 +31,13 @@ if settings.SENTRY_DSN is not None:
 app.include_router(user_router, prefix=f"{settings.API_V1_STR}/users", tags=["users"])
 app.include_router(item_router, prefix=f"{settings.API_V1_STR}/items", tags=["items"])
 app.include_router(blog_router, prefix=f"{settings.API_V1_STR}/entries", tags=["entries"])
+app.include_router(
+    comment_router,
+    prefix=f"{settings.API_V1_STR}/comments",
+    tags=["comments"],
+)
+app.include_router(
+    article_router,
+    prefix=f"{settings.API_V1_STR}/articles",
+    tags=["articles"],
+)

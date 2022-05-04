@@ -8,6 +8,7 @@ from item.models import Base as ItemModelsBase  # noqa
 from user.models import Base as UserModelsBase  # noqa
 from blog.models import Base as EntryModelsBase  # noqa
 from articles.models import Base as ArticleModelsBase  # noqa
+from comments.models import Base as CommentModelsBase  # noqa
 
 
 config = context.config
