@@ -63,5 +63,8 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
 
+    JWT_ENCODING_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
 
 settings = Settings()

@@ -9,9 +9,10 @@ from comments.models import Comment as CommentModel
 from comments.repositories import CommentRepository
 from comments.schemas import Comment as CommentSchema
 from comments.schemas import CommentCreate as CommentCreateSchema
-
+from user.auth_utils import get_oauth2_scheme
 
 router = APIRouter()
+oauth2_scheme = get_oauth2_scheme()
 
 
 @router.get("/", response_model=List[CommentSchema])
@@ -37,6 +38,7 @@ async def create_comment(
     comment_repository: CommentRepository = Depends(CommentRepository.instance),
     entry_repository: EntryRepository = Depends(EntryRepository.instance),
     article_repository: ArticleRepository = Depends(ArticleRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> CommentModel:
     """
     Create new comment.
@@ -71,7 +73,8 @@ async def create_comment(
 @router.delete("/{comment_id}", response_model=CommentSchema)
 def delete_comment(
     comment_id: int,
-    comment_repository: CommentRepository = Depends(CommentRepository.instance)
+    comment_repository: CommentRepository = Depends(CommentRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> CommentModel:
     """
     Delete a comment.

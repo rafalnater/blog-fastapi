@@ -8,9 +8,10 @@ from articles.repositories import ArticleRepository
 from articles.schemas import Article as ArticleSchema
 from articles.schemas import ArticleCreate as ArticleCreateSchema
 from articles.schemas import ArticleUpdate as ArticleUpdateSchema
-
+from user.auth_utils import get_oauth2_scheme
 
 router = APIRouter()
+oauth2_scheme = get_oauth2_scheme()
 
 
 @router.get("/", response_model=List[ArticleSchema])
@@ -28,6 +29,7 @@ async def get_articles(
 async def create_article(
     article: ArticleCreateSchema,
     article_repository: ArticleRepository = Depends(ArticleRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> ArticleModel:
     """
     Create new article.
@@ -43,6 +45,7 @@ async def update_article(
     article_id: int,
     article: ArticleUpdateSchema,
     article_repository: ArticleRepository = Depends(ArticleRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> ArticleModel:
     article_object = article_repository.find_by_id(identifier=article_id)
     if not article_object:
@@ -62,9 +65,10 @@ async def get_article(
 
 
 @router.delete("/{article_id}", response_model=ArticleSchema)
-def delete_item(
+def delete_article(
     article_id: int,
     article_repository: ArticleRepository = Depends(ArticleRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> ArticleModel:
     """
     Delete an article.
