@@ -2,10 +2,11 @@ from datetime import timedelta, datetime
 from typing import Optional
 
 from core.settings import settings
+from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -17,3 +18,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         key=settings.SECRET_KEY,
         algorithm=settings.JWT_ENCODING_ALGORITHM,
     )
+
+
+def get_oauth2_scheme() -> OAuth2PasswordBearer:
+    return OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/users/token")
