@@ -8,9 +8,10 @@ from blog.repositories import EntryRepository
 from blog.schemas import Entry as EntrySchema
 from blog.schemas import EntryCreate as EntryCreateSchema
 from blog.schemas import EntryUpdate as EntryUpdateSchema
-
+from user.auth_utils import get_oauth2_scheme
 
 router = APIRouter()
+oauth2_scheme = get_oauth2_scheme()
 
 
 @router.get("/", response_model=List[EntrySchema])
@@ -28,6 +29,7 @@ async def get_entries(
 async def create_entry(
     entry: EntryCreateSchema,
     entry_repository: EntryRepository = Depends(EntryRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> EntryModel:
     """
     Create new entry.
@@ -43,6 +45,7 @@ async def update_entry(
     entry_id: int,
     entry: EntryUpdateSchema,
     entry_repository: EntryRepository = Depends(EntryRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> EntryModel:
     entry_object = entry_repository.find_by_id(identifier=entry_id)
     if not entry_object:
@@ -62,7 +65,9 @@ async def get_entry(
 
 @router.delete("/{entry_id}", response_model=EntrySchema)
 def delete_item(
-    entry_id: int, entry_repository: EntryRepository = Depends(EntryRepository.instance)
+    entry_id: int,
+    entry_repository: EntryRepository = Depends(EntryRepository.instance),
+    token: str = Depends(oauth2_scheme),
 ) -> EntryModel:
     """
     Delete an entry.
